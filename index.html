@@ -4,7 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Die Rezeptbox</title>
-  
+
+  <!--
+    ============================================================
+    EINRICHTUNG (einmalig) — siehe Anleitung im Chat für Details
+    ============================================================
+    1. Auf https://console.firebase.google.com ein kostenloses Projekt anlegen.
+    2. Im Projekt: "Firestore Database" aktivieren (im Produktionsmodus).
+    3. Im Projekt: "Authentication" aktivieren -> Anmelde-Methode "Google" einschalten.
+    4. Unter Projekteinstellungen -> "Meine Apps" -> Web-App hinzufügen.
+       Dort bekommst du ein Konfigurationsobjekt — das unten bei
+       "firebaseConfig" einfügen (ersetzt die Platzhalter).
+    5. In Firestore unter "Regeln" die Sicherheitsregeln einfügen,
+       die im Chat bereitgestellt wurden.
+    ============================================================
+  -->
+
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
@@ -35,12 +50,12 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    .rb-fab, .rb-close, .rb-small-btn, .rb-save-btn, .rb-source-btn, .rb-time-chip, .rb-cat-chip, .rb-heart, .rb-stepper button, .rb-ing-remove, .rb-filter-btn, .rb-active-chip, .rb-edit-btn {
+    .rb-fab, .rb-close, .rb-small-btn, .rb-save-btn, .rb-source-btn, .rb-time-chip, .rb-cat-chip, .rb-heart, .rb-stepper button, .rb-ing-remove, .rb-filter-btn, .rb-active-chip, .rb-edit-btn, .rb-google-btn, .rb-signout-btn {
       -webkit-user-select: none;
       user-select: none;
     }
 
-    .rb-header { padding: 28px 20px 14px 20px; }
+    .rb-topbar { padding: 28px 20px 14px 20px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
     .rb-title {
       font-family: 'Fraunces', serif;
       font-optical-sizing: auto;
@@ -57,6 +72,11 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
+
+    .rb-user-chip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding-top: 4px; }
+    .rb-user-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); background: var(--paper-2); }
+    .rb-user-avatar-fallback { width: 32px; height: 32px; border-radius: 50%; background: var(--wine); color: var(--paper); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
+    .rb-signout-btn { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--wine-dark); background: none; border: none; text-decoration: underline; cursor: pointer; padding: 4px 0; }
 
     .rb-filter-bar { display: flex; align-items: center; gap: 12px; padding: 0 20px; margin-top: 18px; }
     .rb-filter-btn { 
@@ -93,6 +113,7 @@
     .rb-card-tags { display: flex; flex-wrap: wrap; gap: 4px; }
     .rb-chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 10px; background: var(--paper-2); color: var(--wine-dark); white-space: nowrap; }
     .rb-chip-time { background: var(--butter); color: var(--ink); }
+    .rb-chip-author { background: var(--wine); color: var(--paper); }
 
     .rb-heart { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,253,248,0.9); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; z-index: 2; color: var(--ink); }
     .rb-heart.liked { color: var(--rust); border-color: var(--rust); }
@@ -176,24 +197,55 @@
 
     .rb-loading, .rb-status { text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--wine-dark); padding: 40px 20px; }
 
+    /* Login screen */
+    .rb-login { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; gap: 8px; }
+    .rb-login-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 32px; margin: 0; }
+    .rb-login-sub { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--wine-dark); margin: 0 0 28px 0; max-width: 320px; line-height: 1.6; }
+    .rb-google-btn {
+      display: flex; align-items: center; gap: 10px; background: var(--white); color: var(--ink);
+      border: 1px solid var(--line); border-radius: 8px; padding: 13px 22px; font-family: 'Work Sans', sans-serif;
+      font-weight: 600; font-size: 15px; cursor: pointer; box-shadow: 0 1px 3px rgba(43,38,32,0.08);
+    }
+    .rb-google-btn:active { transform: scale(0.97); }
+    .rb-login-error { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--rust); margin-top: 18px; max-width: 320px; }
+    .rb-login-note { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--line); margin-top: 40px; max-width: 300px; line-height: 1.6; }
+
     @media (prefers-reduced-motion: reduce) { .rb-fab, .rb-sheet, .rb-overlay { transition: none; animation: none; } }
   </style>
 </head>
 <body>
 
   <div class="rb-root" id="rbRoot">
-    <div class="rb-header">
-      <p class="rb-title">Die Rezeptbox</p>
-      <p class="rb-subtitle">ein gemeinsames Verzeichnis unvergesslicher Gerichte</p>
-    </div>
-    <div id="rbFilterWrap"></div>
-    <div id="rbBody"><div class="rb-loading">Box wird geöffnet…</div></div>
-    <button class="rb-fab" id="rbFab" aria-label="Gericht hinzufügen">+</button>
+    <div id="rbApp"><div class="rb-loading">Wird geladen…</div></div>
   </div>
-  <div id="rbOverlayHost"></div>
 
-  <script>
-  (function(){
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, where
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    // ============================================================
+    // HIER DEINE FIREBASE-KONFIGURATION EINFÜGEN
+    // (Firebase-Konsole -> Projekteinstellungen -> Meine Apps -> Web-App)
+    // ============================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyAG-y8pAAa9hHbYbBxbNd5--LdQ6y7VxFY",
+      authDomain: "rezeptbox-59e41.firebaseapp.com",
+      projectId: "rezeptbox-59e41",
+      storageBucket: "rezeptbox-59e41.firebasestorage.app",
+      messagingSenderId: "735417717313",
+      appId: "1:735417717313:web:f1d0fea894dd0c1a92ecc0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
     const SOURCE_TYPES = [
       { key: 'cookbook', label: 'Kochbuch', placeholder: 'Buchtitel & Seite' },
       { key: 'instagram', label: 'Instagram', placeholder: '@Handle oder Link' },
@@ -207,8 +259,12 @@
     const TAB_COLORS = ['var(--wine)', 'var(--rust)', 'var(--butter)'];
 
     const state = {
-      meals: [], loading: true, error: null, activeFilters: new Set(), showFavoritesOnly: false, overlay: null, addDraft: null, detailServings: null
+      authLoading: true, user: null, authError: null,
+      recipesRaw: [], favoriteIds: new Set(), recipesLoaded: false, favesLoaded: false,
+      error: null, activeFilters: new Set(), showFavoritesOnly: false,
+      overlay: null, addDraft: null, detailServings: null
     };
+    let unsubRecipes = null, unsubFaves = null;
 
     function tabColor(str) {
       let hash = 0;
@@ -229,51 +285,105 @@
       const found = UNITS.find(x => x.toLowerCase() === String(u).toLowerCase());
       return found || 'sonst.';
     }
-    function stripKey(m) { const copy = Object.assign({}, m); delete copy._key; return copy; }
-
-    async function loadMeals() {
-      state.loading = true; state.error = null; render();
-      try {
-          const keys = Object.keys(localStorage).filter(k => k.startsWith('meal:'));
-          const meals = [];
-          for (const key of keys) {
-              const val = localStorage.getItem(key);
-              if (val) {
-                  const parsed = JSON.parse(val);
-                  parsed._key = key;
-                  meals.push(parsed);
-              }
-          }
-          meals.sort((a, b) => (b.dateAdded || 0) - (a.dateAdded || 0));
-          state.meals = meals;
-          state.loading = false;
-      } catch (e) {
-          state.loading = false;
-          state.error = 'Die Rezeptbox konnte nicht geladen werden.';
-      }
-      render();
+    function initials(name) {
+      if (!name) return '?';
+      return name.trim().split(/\s+/).map(p => p[0]).slice(0, 2).join('').toUpperCase();
     }
 
-    async function saveMeal(entry) { localStorage.setItem('meal:' + entry.id, JSON.stringify(entry)); }
-    async function deleteMeal(key) { localStorage.removeItem(key); }
-
-    async function toggleLike(key) {
-      const m = state.meals.find(x => x._key === key);
-      if (!m) return;
-      m.liked = !m.liked;
+    // ---------- Auth ----------
+    onAuthStateChanged(auth, (user) => {
+      state.authLoading = false;
+      state.user = user;
+      if (user) { subscribeToData(user); }
+      else { teardownSubscriptions(); resetLocalState(); }
       render();
-      try { await saveMeal(stripKey(m)); }
-      catch (e) { m.liked = !m.liked; render(); }
+    });
+
+    function resetLocalState() {
+      state.recipesRaw = []; state.favoriteIds = new Set();
+      state.recipesLoaded = false; state.favesLoaded = false;
+      state.activeFilters = new Set(); state.showFavoritesOnly = false;
+      state.overlay = null; state.addDraft = null;
+    }
+    function teardownSubscriptions() {
+      if (unsubRecipes) { unsubRecipes(); unsubRecipes = null; }
+      if (unsubFaves) { unsubFaves(); unsubFaves = null; }
+    }
+
+    async function doSignIn() {
+      state.authError = null; render();
+      try { await signInWithPopup(auth, provider); }
+      catch (e) { state.authError = 'Anmeldung fehlgeschlagen. Bitte erneut versuchen.'; render(); }
+    }
+    async function doSignOut() {
+      teardownSubscriptions();
+      await signOut(auth);
+    }
+
+    // ---------- Firestore subscriptions ----------
+    function subscribeToData(user) {
+      teardownSubscriptions();
+      state.error = null;
+
+      unsubRecipes = onSnapshot(
+        collection(db, 'recipes'),
+        (snap) => {
+          state.recipesRaw = snap.docs.map(d => d.data());
+          state.recipesLoaded = true;
+          render();
+        },
+        (err) => { state.error = 'Rezepte konnten nicht geladen werden. Prüfe deine Verbindung.'; render(); }
+      );
+
+      const favQuery = query(collection(db, 'favorites'), where('uid', '==', user.uid));
+      unsubFaves = onSnapshot(
+        favQuery,
+        (snap) => {
+          const ids = new Set();
+          snap.docs.forEach(d => { if (d.data().liked) ids.add(d.data().recipeId); });
+          state.favoriteIds = ids;
+          state.favesLoaded = true;
+          render();
+        },
+        (err) => { state.favesLoaded = true; render(); }
+      );
+    }
+
+    function getMeals() {
+      return state.recipesRaw
+        .map(m => Object.assign({}, m, { liked: state.favoriteIds.has(m.id) }))
+        .sort((a, b) => (b.dateAdded || 0) - (a.dateAdded || 0));
+    }
+
+    async function saveRecipe(entry) {
+      await setDoc(doc(db, 'recipes', entry.id), entry);
+    }
+    async function deleteRecipe(id) {
+      await deleteDoc(doc(db, 'recipes', id));
+    }
+    async function toggleLike(id) {
+      const liked = !state.favoriteIds.has(id);
+      // optimistic UI update
+      if (liked) state.favoriteIds.add(id); else state.favoriteIds.delete(id);
+      render();
+      try {
+        await setDoc(doc(db, 'favorites', state.user.uid + '_' + id), {
+          uid: state.user.uid, recipeId: id, liked
+        });
+      } catch (e) {
+        if (liked) state.favoriteIds.delete(id); else state.favoriteIds.add(id);
+        render();
+      }
     }
 
     function allCategories() {
       const set = new Set();
-      state.meals.forEach(m => (m.categories || []).forEach(c => set.add(c)));
+      state.recipesRaw.forEach(m => (m.categories || []).forEach(c => set.add(c)));
       return Array.from(set).sort();
     }
 
     function filteredMeals() {
-      let list = state.meals;
+      let list = getMeals();
       if (state.showFavoritesOnly) list = list.filter(m => m.liked);
       if (state.activeFilters.size > 0) {
         list = list.filter(m => {
@@ -285,16 +395,69 @@
       return list;
     }
 
-    function render() { renderFilterBar(); renderBody(); renderOverlay(); }
+    // ---------- Render root ----------
+    function render() {
+      const host = document.getElementById('rbApp');
+      if (state.authLoading) { host.innerHTML = '<div class="rb-loading">Wird geladen…</div>'; return; }
+      if (!state.user) { renderLogin(host); return; }
+      renderAppShell(host);
+    }
+
+    function renderLogin(host) {
+      host.innerHTML = `
+        <div class="rb-login">
+          <p class="rb-login-title">Die Rezeptbox</p>
+          <p class="rb-login-sub">Euer gemeinsames Verzeichnis unvergesslicher Gerichte. Meldet euch beide mit Google an, um eure Rezepte zu teilen.</p>
+          <button class="rb-google-btn" id="rbSignInBtn">
+            <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.5 29.6 4.5 24 4.5 13.2 4.5 4.5 13.2 4.5 24S13.2 43.5 24 43.5 43.5 34.8 43.5 24c0-1.2-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.9 18.9 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.5 29.6 4.5 24 4.5c-7.7 0-14.4 4.3-17.7 10.6z"/><path fill="#4CAF50" d="M24 43.5c5.5 0 10.4-1.9 14.1-5.1l-6.5-5.5c-2 1.5-4.6 2.4-7.6 2.4-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.1 16.2 43.5 24 43.5z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.2 4.2-4.1 5.6l6.5 5.5C41.5 36 43.5 30.5 43.5 24c0-1.2-.1-2.4-.4-3.5z"/></svg>
+            Mit Google anmelden
+          </button>
+          ${state.authError ? `<p class="rb-login-error">${escapeHtml(state.authError)}</p>` : ''}
+          <p class="rb-login-note">Nur wer diesen Link kennt und sich anmeldet, kann die Rezepte sehen und bearbeiten.</p>
+        </div>`;
+      document.getElementById('rbSignInBtn').addEventListener('click', doSignIn);
+    }
+
+    function renderAppShell(host) {
+      host.innerHTML = `
+        <div class="rb-topbar">
+          <div>
+            <p class="rb-title">Die Rezeptbox</p>
+            <p class="rb-subtitle">ein gemeinsames Verzeichnis unvergesslicher Gerichte</p>
+          </div>
+          <div class="rb-user-chip">
+            ${state.user.photoURL
+              ? `<img class="rb-user-avatar" src="${state.user.photoURL}" alt="">`
+              : `<div class="rb-user-avatar-fallback">${escapeHtml(initials(state.user.displayName || state.user.email))}</div>`}
+          </div>
+        </div>
+        <div style="padding:0 20px; margin-top:-10px; margin-bottom:4px; text-align:right;">
+          <button class="rb-signout-btn" id="rbSignOutBtn">Abmelden</button>
+        </div>
+        <div id="rbFilterWrap"></div>
+        <div id="rbBody"></div>
+        <button class="rb-fab" id="rbFab" aria-label="Gericht hinzufügen">+</button>
+      `;
+      document.getElementById('rbSignOutBtn').addEventListener('click', doSignOut);
+      document.getElementById('rbFab').addEventListener('click', () => {
+        state.addDraft = { id: null, name: '', instructions: '', sourceType: 'cookbook', sourceDetail: '', categories: [], prepTime: '', servings: 4, ingredients: [{ amount: '', unit: 'g', name: '' }], photo: null, saving: false, error: null, scanning: false, scanError: null, scanSuccess: false };
+        state.overlay = 'add';
+        renderOverlay();
+      });
+
+      renderFilterBar();
+      renderBody();
+      renderOverlay();
+    }
 
     function renderFilterBar() {
       const wrap = document.getElementById('rbFilterWrap');
+      if (!wrap) return;
       const cats = allCategories();
-      if (state.loading) { wrap.innerHTML = ''; return; }
-      if (cats.length === 0 && state.meals.length === 0) { wrap.innerHTML = ''; return; }
-      
+      if (!state.recipesLoaded) { wrap.innerHTML = ''; return; }
+      if (cats.length === 0 && state.recipesRaw.length === 0) { wrap.innerHTML = ''; return; }
+
       const activeCount = state.activeFilters.size + (state.showFavoritesOnly ? 1 : 0);
-      
       let activeChipsHtml = '';
       if (state.showFavoritesOnly) {
         activeChipsHtml += `<div class="rb-active-chip" data-remove="__fav__">♥ Favoriten <span>×</span></div>`;
@@ -309,33 +472,29 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
             Filter ${activeCount > 0 ? `(${activeCount})` : ''}
           </button>
-          <div class="rb-active-chips">
-            ${activeChipsHtml}
-          </div>
+          <div class="rb-active-chips">${activeChipsHtml}</div>
         </div>
       `;
 
-      document.getElementById('rbOpenFilterBtn').addEventListener('click', () => {
-        state.overlay = 'filter';
-        render();
-      });
-
+      document.getElementById('rbOpenFilterBtn').addEventListener('click', () => { state.overlay = 'filter'; renderOverlay(); });
       wrap.querySelectorAll('.rb-active-chip').forEach(el => {
         el.addEventListener('click', () => {
           const tab = el.getAttribute('data-remove');
           if (tab === '__fav__') state.showFavoritesOnly = false;
           else state.activeFilters.delete(tab);
-          render();
+          renderFilterBar(); renderBody();
         });
       });
     }
 
     function renderBody() {
       const body = document.getElementById('rbBody');
-      if (state.loading) { body.innerHTML = '<div class="rb-loading">Box wird geöffnet…</div>'; return; }
+      if (!body) return;
       if (state.error) { body.innerHTML = `<div class="rb-status">${escapeHtml(state.error)}</div>`; return; }
+      if (!state.recipesLoaded || !state.favesLoaded) { body.innerHTML = '<div class="rb-loading">Box wird geöffnet…</div>'; return; }
+
       const meals = filteredMeals();
-      if (state.meals.length === 0) {
+      if (state.recipesRaw.length === 0) {
         body.innerHTML = `<div class="rb-empty"><p class="rb-empty-title">Noch keine Rezepte</p><p class="rb-empty-sub">Füg dein erstes unvergessliches Gericht hinzu.</p></div>`;
         return;
       }
@@ -346,10 +505,11 @@
       body.innerHTML = `<div class="rb-gallery">${meals.map(cardHtml).join('')}</div>`;
       body.querySelectorAll('.rb-card').forEach(el => {
         el.addEventListener('click', () => {
-          const m = state.meals.find(x => x._key === el.getAttribute('data-id'));
+          const id = el.getAttribute('data-id');
+          const m = getMeals().find(x => x.id === id);
           state.detailServings = m ? (m.servings || 4) : 4;
-          state.overlay = { type: 'detail', id: el.getAttribute('data-id') };
-          render();
+          state.overlay = { type: 'detail', id };
+          renderOverlay();
         });
       });
       body.querySelectorAll('[data-heart]').forEach(el => {
@@ -363,11 +523,11 @@
       const catChips = (m.categories || []).slice(0, 2).map(c => `<span class="rb-chip">${escapeHtml(c)}</span>`).join('');
       const timeChip = m.prepTime ? `<span class="rb-chip rb-chip-time">⏱ ${escapeHtml(m.prepTime)}</span>` : '';
       return `
-        <div class="rb-card" data-id="${m._key}">
+        <div class="rb-card" data-id="${m.id}">
           <div class="rb-card-tab" style="background:${color}"></div>
           <div class="rb-card-photo-wrap">
             ${photo}
-            <button class="rb-heart ${m.liked ? 'liked' : ''}" data-heart="${m._key}">${m.liked ? '♥' : '♡'}</button>
+            <button class="rb-heart ${m.liked ? 'liked' : ''}" data-heart="${m.id}">${m.liked ? '♥' : '♡'}</button>
           </div>
           <div class="rb-card-body">
             <p class="rb-card-name">${escapeHtml(m.name)}</p>
@@ -377,14 +537,17 @@
     }
 
     function renderOverlay() {
-      const host = document.getElementById('rbOverlayHost');
-      if (!state.overlay) { host.innerHTML = ''; return; }
-      if (state.overlay === 'add') { host.innerHTML = addSheetHtml(); bindAddSheet(); return; }
-      if (state.overlay === 'filter') { host.innerHTML = filterSheetHtml(); bindFilterSheet(); return; }
-      if (state.overlay.type === 'detail') { host.innerHTML = detailSheetHtml(state.overlay.id); bindDetailSheet(state.overlay.id); return; }
+      const existing = document.getElementById('rbOverlay');
+      if (existing) existing.remove();
+      if (!state.overlay) return;
+      const host = document.getElementById('rbRoot');
+      const wrap = document.createElement('div');
+      if (state.overlay === 'add') { wrap.innerHTML = addSheetHtml(); host.appendChild(wrap.firstElementChild); bindAddSheet(); return; }
+      if (state.overlay === 'filter') { wrap.innerHTML = filterSheetHtml(); host.appendChild(wrap.firstElementChild); bindFilterSheet(); return; }
+      if (state.overlay.type === 'detail') { wrap.innerHTML = detailSheetHtml(state.overlay.id); host.appendChild(wrap.firstElementChild); bindDetailSheet(state.overlay.id); return; }
     }
 
-    function closeOverlay() { state.overlay = null; state.addDraft = null; render(); }
+    function closeOverlay() { state.overlay = null; state.addDraft = null; renderOverlay(); }
 
     function filterSheetHtml() {
       const cats = allCategories();
@@ -395,14 +558,12 @@
               <p class="rb-sheet-title">Rezepte filtern</p>
               <button class="rb-close" id="rbFilterClose">✕</button>
             </div>
-
             <div class="rb-field">
               <label class="rb-label">Besondere</label>
               <div class="rb-cat-row">
                 <div class="rb-cat-chip ${state.showFavoritesOnly ? 'selected' : ''}" id="rbFilterFav">♥ Nur Favoriten</div>
               </div>
             </div>
-
             <div class="rb-field">
               <label class="rb-label">Tags & Kategorien (Mehrfachauswahl)</label>
               <div class="rb-cat-row">
@@ -410,7 +571,6 @@
                 ${cats.map(c => `<div class="rb-cat-chip tag-filter-chip ${state.activeFilters.has(c) ? 'selected' : ''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</div>`).join('')}
               </div>
             </div>
-
             <button class="rb-save-btn" id="rbFilterClear" style="background: var(--paper-2); color: var(--wine-dark); border: 1px solid var(--line); margin-top: 24px;">Alle Filter zurücksetzen</button>
             <button class="rb-save-btn" id="rbFilterApply" style="margin-top: 8px;">Ergebnisse anzeigen</button>
           </div>
@@ -422,34 +582,33 @@
       document.getElementById('rbOverlay').addEventListener('click', e => { if (e.target.id === 'rbOverlay') closeOverlay(); });
       document.getElementById('rbFilterClose').addEventListener('click', closeOverlay);
       document.getElementById('rbFilterApply').addEventListener('click', closeOverlay);
-
       document.getElementById('rbFilterFav').addEventListener('click', () => {
         state.showFavoritesOnly = !state.showFavoritesOnly;
-        render(); 
+        renderOverlay();
       });
-
       document.querySelectorAll('.tag-filter-chip').forEach(el => {
         el.addEventListener('click', () => {
           const c = el.getAttribute('data-cat');
           if (state.activeFilters.has(c)) state.activeFilters.delete(c);
           else state.activeFilters.add(c);
-          render(); 
+          renderOverlay();
         });
       });
-
       document.getElementById('rbFilterClear').addEventListener('click', () => {
         state.showFavoritesOnly = false;
         state.activeFilters.clear();
         closeOverlay();
+        renderFilterBar(); renderBody();
       });
+      document.getElementById('rbFilterApply').addEventListener('click', () => { renderFilterBar(); renderBody(); });
     }
 
-    function detailSheetHtml(key) {
-      const m = state.meals.find(x => x._key === key);
-      if (!m) return '';
+    function detailSheetHtml(id) {
+      const m = getMeals().find(x => x.id === id);
+      if (!m) return '<div></div>';
       const sourceLabel = (SOURCE_TYPES.find(s => s.key === m.sourceType) || {}).label || 'Sonstiges';
       const sourceLine = m.sourceDetail ? `${sourceLabel} — ${escapeHtml(m.sourceDetail)}` : sourceLabel;
-      const photo = m.photo ? `<div class="rb-detail-photo-wrap"><img class="rb-detail-photo" src="${m.photo}" alt=""><button class="rb-heart rb-heart-detail ${m.liked ? 'liked' : ''}" data-heart="${m._key}">${m.liked ? '♥' : '♡'}</button></div>` : '';
+      const photo = m.photo ? `<div class="rb-detail-photo-wrap"><img class="rb-detail-photo" src="${m.photo}" alt=""><button class="rb-heart rb-heart-detail ${m.liked ? 'liked' : ''}" data-heart="${m.id}">${m.liked ? '♥' : '♡'}</button></div>` : '';
       const tags = (m.categories || []).map(c => `<span class="rb-chip">${escapeHtml(c)}</span>`).join('');
       const timeChip = m.prepTime ? `<span class="rb-chip rb-chip-time">⏱ ${escapeHtml(m.prepTime)}</span>` : '';
       const baseServings = (m.servings && m.servings > 0) ? m.servings : 1;
@@ -471,7 +630,7 @@
             ${photo}
             <div class="rb-detail-name-row">
               <p class="rb-detail-name">${escapeHtml(m.name)}</p>
-              ${!m.photo ? `<button class="rb-heart rb-heart-detail ${m.liked ? 'liked' : ''}" data-heart="${m._key}" style="position:static;">${m.liked ? '♥' : '♡'}</button>` : ''}
+              ${!m.photo ? `<button class="rb-heart rb-heart-detail ${m.liked ? 'liked' : ''}" data-heart="${m.id}" style="position:static;">${m.liked ? '♥' : '♡'}</button>` : ''}
             </div>
             <p class="rb-detail-source">${sourceLine}</p>
             <div class="rb-detail-tags">${timeChip}${tags}</div>
@@ -500,24 +659,21 @@
         </div>`;
     }
 
-    function bindDetailSheet(key) {
+    function bindDetailSheet(id) {
       document.getElementById('rbOverlay').addEventListener('click', e => { if (e.target.id === 'rbOverlay') closeOverlay(); });
       document.getElementById('rbDetailClose').addEventListener('click', closeOverlay);
-      
+
       document.getElementById('rbDeleteBtn').addEventListener('click', async () => {
-        if (!confirm('Dieses Rezept endgültig löschen?')) return;
-        await deleteMeal(key);
-        closeOverlay();
-        loadMeals();
+        if (!confirm('Dieses Rezept endgültig löschen? Es verschwindet für euch beide.')) return;
+        try { await deleteRecipe(id); closeOverlay(); }
+        catch (e) { alert('Löschen fehlgeschlagen. Bitte erneut versuchen.'); }
       });
 
-      // NEU: Bearbeiten-Logik
       document.getElementById('rbEditBtn').addEventListener('click', () => {
-        const m = state.meals.find(x => x._key === key);
-        if(!m) return;
-        
+        const m = getMeals().find(x => x.id === id);
+        if (!m) return;
         state.addDraft = {
-          id: m.id || m._key.replace('meal:', ''), // ID beibehalten für Überschreiben
+          id: m.id,
           name: m.name || '',
           instructions: m.instructions || '',
           sourceType: m.sourceType || 'cookbook',
@@ -525,28 +681,25 @@
           categories: [...(m.categories || [])],
           prepTime: m.prepTime || '',
           servings: m.servings || 4,
-          ingredients: (m.ingredients && m.ingredients.length > 0) 
-            ? JSON.parse(JSON.stringify(m.ingredients)) 
-            : [{ amount: '', unit: 'g', name: '' }],
+          ingredients: (m.ingredients && m.ingredients.length > 0) ? JSON.parse(JSON.stringify(m.ingredients)) : [{ amount: '', unit: 'g', name: '' }],
           photo: m.photo || null,
           saving: false, error: null, scanning: false, scanError: null, scanSuccess: false,
-          dateAdded: m.dateAdded || Date.now(),
-          liked: m.liked || false
+          dateAdded: m.dateAdded || Date.now()
         };
         state.overlay = 'add';
-        render();
+        renderOverlay();
       });
 
       document.getElementById('rbServMinus').addEventListener('click', () => {
         state.detailServings = Math.max(1, (state.detailServings || 1) - 1);
-        render();
+        renderOverlay();
       });
       document.getElementById('rbServPlus').addEventListener('click', () => {
         state.detailServings = (state.detailServings || 1) + 1;
-        render();
+        renderOverlay();
       });
       document.querySelectorAll('#rbOverlay [data-heart]').forEach(el => {
-        el.addEventListener('click', () => toggleLike(el.getAttribute('data-heart')));
+        el.addEventListener('click', () => { toggleLike(el.getAttribute('data-heart')); renderOverlay(); renderBody(); });
       });
     }
 
@@ -644,24 +797,24 @@
       document.getElementById('rbServingsInput').addEventListener('input', e => { d.servings = e.target.value; });
 
       document.getElementById('rbSourceRow').querySelectorAll('.rb-source-btn').forEach(el => {
-        el.addEventListener('click', () => { d.sourceType = el.getAttribute('data-key'); render(); });
+        el.addEventListener('click', () => { d.sourceType = el.getAttribute('data-key'); renderOverlay(); });
       });
       document.getElementById('rbTimeRow').querySelectorAll('.rb-time-chip').forEach(el => {
-        el.addEventListener('click', () => { d.prepTime = el.getAttribute('data-time'); render(); });
+        el.addEventListener('click', () => { d.prepTime = el.getAttribute('data-time'); renderOverlay(); });
       });
       document.getElementById('rbCatRow').querySelectorAll('.rb-cat-chip').forEach(el => {
         el.addEventListener('click', () => {
           const c = el.getAttribute('data-cat');
           const idx = d.categories.indexOf(c);
           if (idx >= 0) d.categories.splice(idx, 1); else d.categories.push(c);
-          render();
+          renderOverlay();
         });
       });
       document.getElementById('rbCatAddBtn').addEventListener('click', () => {
         const input = document.getElementById('rbCatCustom');
         const val = input.value.trim();
         if (val && !d.categories.includes(val)) d.categories.push(val);
-        render();
+        renderOverlay();
       });
 
       document.getElementById('rbIngRows').querySelectorAll('.rb-ing-row').forEach(row => {
@@ -669,11 +822,11 @@
         row.querySelector('.rb-ing-amount').addEventListener('input', e => { d.ingredients[i].amount = e.target.value; });
         row.querySelector('.rb-ing-unit').addEventListener('change', e => { d.ingredients[i].unit = e.target.value; });
         row.querySelector('.rb-ing-name').addEventListener('input', e => { d.ingredients[i].name = e.target.value; });
-        row.querySelector('.rb-ing-remove').addEventListener('click', () => { d.ingredients.splice(i, 1); render(); });
+        row.querySelector('.rb-ing-remove').addEventListener('click', () => { d.ingredients.splice(i, 1); renderOverlay(); });
       });
       document.getElementById('rbIngAddBtn').addEventListener('click', () => {
         d.ingredients.push({ amount: '', unit: 'g', name: '' });
-        render();
+        renderOverlay();
       });
 
       const photoWell = document.getElementById('rbPhotoWell');
@@ -682,8 +835,8 @@
       photoInput.addEventListener('change', async () => {
         const file = photoInput.files[0];
         if (!file) return;
-        try { d.photo = await resizeImage(file, 900, 0.72); render(); }
-        catch (e) { d.error = 'Dieses Foto konnte nicht gelesen werden. Versuch ein anderes.'; render(); }
+        try { d.photo = await resizeImage(file, 800, 0.68); renderOverlay(); }
+        catch (e) { d.error = 'Dieses Foto konnte nicht gelesen werden. Versuch ein anderes.'; renderOverlay(); }
       });
 
       const scanBtn = document.getElementById('rbScanBtn');
@@ -693,7 +846,7 @@
         const file = scanInput.files[0];
         if (!file) return;
         d.scanning = true; d.scanError = null; d.scanSuccess = false;
-        render();
+        renderOverlay();
         try {
           const dataUrl = await resizeImage(file, 1600, 0.85);
           const base64 = dataUrl.split(',')[1];
@@ -729,21 +882,21 @@
           }
           d.scanning = false;
           d.scanSuccess = true;
-          render();
+          renderOverlay();
         } catch (e) {
           d.scanning = false;
           d.scanError = 'Das Rezept konnte nicht automatisch erkannt werden. Bitte manuell eintragen oder ein anderes Foto versuchen.';
-          render();
+          renderOverlay();
         }
       });
 
       document.getElementById('rbSaveBtn').addEventListener('click', async () => {
-        if (!d.name.trim()) { d.error = 'Bitte gib dem Gericht zuerst einen Namen.'; render(); return; }
+        if (!d.name.trim()) { d.error = 'Bitte gib dem Gericht zuerst einen Namen.'; renderOverlay(); return; }
         d.error = null;
         d.saving = true;
-        render();
+        renderOverlay();
         const entry = {
-          id: d.id || newId(), // Behält ID bei Bearbeitung, generiert neue für neue Rezepte
+          id: d.id || newId(),
           name: d.name.trim(),
           instructions: d.instructions.trim(),
           sourceType: d.sourceType,
@@ -753,16 +906,17 @@
           servings: Number(d.servings) || 1,
           ingredients: d.ingredients.filter(ing => ing.name && ing.name.trim()).map(ing => ({ amount: ing.amount === '' ? null : Number(ing.amount), unit: ing.unit, name: ing.name.trim() })),
           photo: d.photo,
-          liked: d.liked || false,
+          addedBy: state.user.uid,
+          addedByName: state.user.displayName || state.user.email || '',
           dateAdded: d.dateAdded || Date.now()
         };
-        try { await saveMeal(entry); closeOverlay(); loadMeals(); }
-        catch (e) { d.saving = false; d.error = 'Konnte nicht gespeichert werden. Prüfe deine Verbindung und versuch es erneut.'; render(); }
+        try { await saveRecipe(entry); closeOverlay(); }
+        catch (e) { d.saving = false; d.error = 'Konnte nicht gespeichert werden. Prüfe deine Verbindung und versuch es erneut.'; renderOverlay(); }
       });
     }
 
     function resizeImage(file, maxDim, quality) {
-      maxDim = maxDim || 900; quality = quality || 0.72;
+      maxDim = maxDim || 800; quality = quality || 0.68;
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = e => {
@@ -784,14 +938,7 @@
       });
     }
 
-    document.getElementById('rbFab').addEventListener('click', () => {
-      state.addDraft = { name: '', instructions: '', sourceType: 'cookbook', sourceDetail: '', categories: [], prepTime: '', servings: 4, ingredients: [{ amount: '', unit: 'g', name: '' }], photo: null, saving: false, error: null, scanning: false, scanError: null, scanSuccess: false };
-      state.overlay = 'add';
-      render();
-    });
-
-    loadMeals();
-  })();
+    render();
   </script>
 </body>
 </html>
