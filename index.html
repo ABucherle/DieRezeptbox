@@ -222,7 +222,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
-      getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
+      getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult, onAuthStateChanged, signOut
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     import {
       getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query, where
@@ -291,6 +291,10 @@
     }
 
     // ---------- Auth ----------
+    getRedirectResult(auth).catch((e) => {
+      state.authError = 'Anmeldung fehlgeschlagen. Bitte erneut versuchen.';
+    });
+
     onAuthStateChanged(auth, (user) => {
       state.authLoading = false;
       state.user = user;
@@ -312,7 +316,7 @@
 
     async function doSignIn() {
       state.authError = null; render();
-      try { await signInWithPopup(auth, provider); }
+      try { await signInWithRedirect(auth, provider); }
       catch (e) { state.authError = 'Anmeldung fehlgeschlagen. Bitte erneut versuchen.'; render(); }
     }
     async function doSignOut() {
