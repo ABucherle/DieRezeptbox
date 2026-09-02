@@ -550,7 +550,7 @@
         <div class="rb-topbar">
           <div>
             <p class="rb-title">Die Rezeptbox</p>
-            <p class="rb-subtitle">ein gemeinsames Verzeichnis unvergesslicher Gerichte</p>
+            <p class="rb-subtitle">Nie wieder überlegen, was es heute gibt.</p>
           </div>
           <div class="rb-user-chip">
             ${state.user.photoURL
@@ -595,12 +595,12 @@
 
       wrap.innerHTML = `
         <div class="rb-filter-bar">
+          <button class="rb-fav-toggle ${state.showFavoritesOnly ? 'on' : ''}" id="rbFavToggle" aria-label="Nur Favoriten anzeigen">
+            ${state.showFavoritesOnly ? ICONS.heartFilled : ICONS.heartOutline}
+          </button>
           <button class="rb-filter-btn ${activeCount > 0 ? 'active' : ''}" id="rbOpenFilterBtn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
             Filter ${activeCount > 0 ? `(${activeCount})` : ''}
-          </button>
-          <button class="rb-fav-toggle ${state.showFavoritesOnly ? 'on' : ''}" id="rbFavToggle" aria-label="Nur Favoriten anzeigen">
-            ${state.showFavoritesOnly ? ICONS.heartFilled : ICONS.heartOutline}
           </button>
           <div class="rb-active-chips">${activeChipsHtml}</div>
         </div>
