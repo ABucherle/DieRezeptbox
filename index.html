@@ -21,18 +21,29 @@
   -->
 
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Work+Sans:wght@400;500;600&display=swap');
 
     :root {
-      --ink: #2B2620;
-      --paper: #F6EFDE;
-      --paper-2: #EFE4CB;
-      --white: #FFFDF8;
-      --wine: #7A2E33;
-      --wine-dark: #55202A;
-      --rust: #B5502D;
-      --butter: #E8B23D;
-      --line: #C9BFA8;
+      --bg-1: #EAF6EF;
+      --bg-2: #E4F1F5;
+      --glass: rgba(255,255,255,0.55);
+      --glass-strong: rgba(255,255,255,0.74);
+      --glass-border: rgba(90,150,140,0.22);
+      --ink: #16302A;
+      --muted: #5C7A73;
+      --accent: #82C3F5;
+      --on-accent: #0E3A56;
+      --mint: #14A585;
+      --mint-bg: rgba(20,165,133,0.14);
+      --mint-ink: #0E8069;
+      --tag-bg: rgba(90,150,140,0.12);
+      --heart-bg: rgba(255,255,255,0.75);
+      --row-border: rgba(90,150,140,0.18);
+      --photo-grad: linear-gradient(135deg,#BEE8D4,#B7D6EF);
+      --danger: #C1584F;
+      --tab-a: var(--accent);
+      --tab-b: var(--mint-ink);
+      --tab-c: #5C9BD1;
     }
 
     .rb-root * { 
@@ -41,9 +52,10 @@
     }
 
     .rb-root {
-      font-family: 'Work Sans', sans-serif;
+      font-family: 'Work Sans', -apple-system, sans-serif;
       color: var(--ink);
-      background: var(--paper);
+      background: linear-gradient(160deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      background-attachment: fixed;
       min-height: 100vh;
       padding: 0 0 100px 0;
       box-sizing: border-box;
@@ -54,160 +66,160 @@
       -webkit-user-select: none;
       user-select: none;
     }
+    svg.rb-icon { display: block; flex-shrink: 0; }
 
-    .rb-topbar { padding: 28px 20px 14px 20px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+    .rb-topbar { padding: 30px 20px 14px 20px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
     .rb-title {
-      font-family: 'Fraunces', serif;
-      font-optical-sizing: auto;
-      font-weight: 700;
-      font-size: 34px;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 32px;
       margin: 0;
-      letter-spacing: -0.01em;
+      letter-spacing: -0.02em;
+      color: var(--ink);
     }
     .rb-subtitle {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px;
-      color: var(--wine-dark);
-      margin: 4px 0 0 0;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+      font-family: 'Work Sans', sans-serif;
+      font-size: 13px;
+      color: var(--muted);
+      margin: 5px 0 0 0;
     }
 
     .rb-user-chip { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding-top: 4px; }
-    .rb-user-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); background: var(--paper-2); }
-    .rb-user-avatar-fallback { width: 32px; height: 32px; border-radius: 50%; background: var(--wine); color: var(--paper); display: flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; }
-    .rb-signout-btn { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--wine-dark); background: none; border: none; text-decoration: underline; cursor: pointer; padding: 4px 0; }
+    .rb-user-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid var(--glass-border); background: var(--glass); }
+    .rb-user-avatar-fallback { width: 34px; height: 34px; border-radius: 50%; background: var(--accent); color: var(--on-accent); display: flex; align-items: center; justify-content: center; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13px; }
+    .rb-signout-btn { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--muted); background: none; border: none; text-decoration: underline; cursor: pointer; padding: 4px 0; }
 
-    .rb-filter-bar { display: flex; align-items: center; gap: 12px; padding: 0 20px; margin-top: 18px; }
+    .rb-filter-bar { display: flex; align-items: center; gap: 10px; padding: 0 20px; margin-top: 16px; }
     .rb-filter-btn { 
-      font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; 
-      padding: 8px 16px; border-radius: 20px; border: 1px solid var(--line); 
-      background: var(--white); color: var(--ink); cursor: pointer; 
+      font-family: 'Work Sans', sans-serif; font-size: 13px; font-weight: 600; 
+      padding: 9px 16px; border-radius: 20px; border: 1px solid var(--glass-border); 
+      background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      color: var(--ink); cursor: pointer; 
       display: flex; align-items: center; gap: 6px; flex-shrink: 0; 
-      box-shadow: 0 1px 2px rgba(43,38,32,0.05); transition: all 0.15s ease;
+      box-shadow: 0 2px 10px rgba(40,90,80,0.06); transition: all 0.15s ease;
     }
     .rb-filter-btn:active { transform: scale(0.96); }
-    .rb-filter-btn.active { background: var(--wine); color: var(--paper); border-color: var(--wine); }
+    .rb-filter-btn.active { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
     
     .rb-active-chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
     .rb-active-chips::-webkit-scrollbar { display: none; }
     .rb-active-chip { 
-      font-family: 'IBM Plex Mono', monospace; font-size: 12px; 
-      padding: 6px 12px 6px 14px; border-radius: 16px; background: var(--paper-2); 
+      font-family: 'Work Sans', sans-serif; font-size: 12px; font-weight: 500;
+      padding: 6px 10px 6px 14px; border-radius: 16px; background: var(--glass); backdrop-filter: blur(14px);
       color: var(--ink); white-space: nowrap; display: flex; align-items: center; 
-      gap: 6px; border: 1px solid var(--line); cursor: pointer; 
+      gap: 6px; border: 1px solid var(--glass-border); cursor: pointer; 
     }
-    .rb-active-chip span { color: var(--rust); font-size: 14px; font-weight: bold; line-height: 1; margin-top: -1px; }
+    .rb-active-chip span { color: var(--danger); font-size: 15px; font-weight: bold; line-height: 1; margin-top: -1px; }
 
     .rb-gallery { padding: 18px 20px 0 20px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
     @media (min-width: 640px) { .rb-gallery { grid-template-columns: repeat(3, 1fr); } }
     @media (min-width: 900px) { .rb-gallery { grid-template-columns: repeat(4, 1fr); } }
 
-    .rb-card { background: var(--white); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; box-shadow: 0 1px 0 rgba(43,38,32,0.05); }
-    .rb-card-tab { height: 6px; width: 100%; }
-    .rb-card-photo-wrap { padding: 10px 10px 0 10px; position: relative; }
-    .rb-card-photo { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 2px; border: 4px solid var(--white); outline: 1px solid var(--line); transform: rotate(-1deg); display: block; background: var(--paper-2); }
-    .rb-card-photo-empty { width: 100%; aspect-ratio: 1/1; border-radius: 2px; border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; color: var(--line); font-family: 'IBM Plex Mono', monospace; font-size: 24px; background: var(--paper); }
-    .rb-card-body { padding: 10px 12px 12px 12px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
-    .rb-card-name { font-family: 'Fraunces', serif; font-weight: 600; font-size: 16px; line-height: 1.2; margin: 0; }
+    .rb-card { background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: 20px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; box-shadow: 0 8px 24px rgba(40,90,80,0.10), inset 0 1px 0 rgba(255,255,255,0.6); }
+    .rb-card-tab { height: 5px; width: 100%; }
+    .rb-card-photo-wrap { position: relative; }
+    .rb-card-photo { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: var(--photo-grad); }
+    .rb-card-photo-empty { width: 100%; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; color: var(--muted); background: var(--photo-grad); }
+    .rb-card-body { padding: 12px 13px 14px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .rb-card-name { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 15px; line-height: 1.25; margin: 0; }
     .rb-card-tags { display: flex; flex-wrap: wrap; gap: 4px; }
-    .rb-chip { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 10px; background: var(--paper-2); color: var(--wine-dark); white-space: nowrap; }
-    .rb-chip-time { background: var(--butter); color: var(--ink); }
-    .rb-chip-author { background: var(--wine); color: var(--paper); }
+    .rb-chip { font-family: 'Work Sans', sans-serif; font-size: 10px; font-weight: 600; padding: 3px 8px; border-radius: 8px; background: var(--tag-bg); color: var(--muted); white-space: nowrap; display: flex; align-items: center; gap: 3px; }
+    .rb-chip-time { background: var(--mint-bg); color: var(--mint-ink); }
+    .rb-chip-author { background: var(--accent); color: var(--on-accent); }
 
-    .rb-heart { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border-radius: 50%; background: rgba(255,253,248,0.9); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; z-index: 2; color: var(--ink); }
-    .rb-heart.liked { color: var(--rust); border-color: var(--rust); }
-    .rb-heart-detail { font-size: 20px; }
+    .rb-heart { position: absolute; top: 10px; right: 10px; width: 34px; height: 34px; border-radius: 50%; background: var(--heart-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2; color: var(--ink); }
+    .rb-heart-detail { width: 40px; height: 40px; }
 
-    .rb-empty { margin: 40px 20px; text-align: center; padding: 40px 20px; border: 1px dashed var(--line); border-radius: 6px; }
-    .rb-empty-title { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 600; margin: 0 0 6px 0; }
-    .rb-empty-sub { font-size: 14px; color: var(--wine-dark); margin: 0; }
+    .rb-empty { margin: 40px 20px; text-align: center; padding: 40px 20px; border: 1px dashed var(--glass-border); border-radius: 16px; background: var(--glass); }
+    .rb-empty-title { font-family: 'Manrope', sans-serif; font-size: 19px; font-weight: 700; margin: 0 0 6px 0; }
+    .rb-empty-sub { font-size: 14px; color: var(--muted); margin: 0; }
 
-    .rb-fab { position: fixed; right: 36px; bottom: calc(44px + env(safe-area-inset-bottom, 0px)); width: 58px; height: 58px; border-radius: 50%; background: var(--rust); color: var(--paper); border: none; font-size: 28px; line-height: 1; box-shadow: 0 4px 14px rgba(181,80,45,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 40; }
+    .rb-fab { position: fixed; right: 24px; bottom: calc(30px + env(safe-area-inset-bottom, 0px)); width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, #97CDF7, #6FAEE0); border: none; box-shadow: 0 8px 22px rgba(130,195,245,0.45); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 40; }
     .rb-fab:active { transform: scale(0.94); }
 
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-    .rb-overlay { position: fixed; inset: 0; background: rgba(20,17,13,0.6); z-index: 50; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.2s ease-out forwards; }
-    .rb-sheet { background: var(--white); width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; border-radius: 16px 16px 0 0; padding: 18px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px; box-shadow: 0 -8px 40px rgba(20,17,13,0.35); border-top: 1px solid var(--line); overscroll-behavior-y: contain; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .rb-overlay { position: fixed; inset: 0; background: rgba(15,35,30,0.35); backdrop-filter: blur(2px); z-index: 50; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.2s ease-out forwards; }
+    .rb-sheet { background: var(--glass-strong); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; border-radius: 24px 24px 0 0; padding: 18px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px; box-shadow: 0 -16px 50px rgba(20,60,50,0.18), inset 0 1px 0 rgba(255,255,255,0.5); border-top: 1px solid var(--glass-border); overscroll-behavior-y: contain; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     
-    @media (min-width: 640px) { .rb-overlay { align-items: center; } .rb-sheet { border-radius: 12px; max-height: 88vh; border: 1px solid var(--line); } }
+    @media (min-width: 640px) { .rb-overlay { align-items: center; } .rb-sheet { border-radius: 20px; max-height: 88vh; border: 1px solid var(--glass-border); } }
     .rb-sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-    .rb-sheet-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 20px; margin: 0; }
+    .rb-sheet-title { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 19px; margin: 0; }
     
-    .rb-close { background: none; border: none; font-size: 20px; color: var(--ink); cursor: pointer; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .rb-close { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 50%; color: var(--ink); cursor: pointer; width: 34px; height: 34px; min-width: 34px; min-height: 34px; display: flex; align-items: center; justify-content: center; padding: 0; }
 
     .rb-field { margin-bottom: 16px; }
-    .rb-label { display: block; font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--wine-dark); margin-bottom: 6px; }
+    .rb-label { display: block; font-family: 'Work Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; }
     
     .rb-input, .rb-textarea, select.rb-input {
-      width: 100%; border: 1px solid var(--line); background: var(--white); border-radius: 6px; padding: 10px 12px;
+      width: 100%; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.6); border-radius: 10px; padding: 10px 12px;
       font-family: 'Work Sans', sans-serif; font-size: 16px; color: var(--ink);
     }
     .rb-textarea { min-height: 110px; resize: vertical; line-height: 1.5; }
-    .rb-input:focus, .rb-textarea:focus { outline: 2px solid var(--wine); outline-offset: 1px; }
+    .rb-input:focus, .rb-textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 
     .rb-source-row, .rb-cat-row, .rb-time-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-    .rb-source-btn, .rb-time-chip { font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 7px 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--white); cursor: pointer; color: var(--ink); }
-    .rb-source-btn.active, .rb-time-chip.active { background: var(--wine); border-color: var(--wine); color: var(--paper); }
+    .rb-source-btn, .rb-time-chip { font-family: 'Work Sans', sans-serif; font-size: 12px; font-weight: 500; padding: 7px 13px; border-radius: 16px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.5); cursor: pointer; color: var(--ink); }
+    .rb-source-btn.active, .rb-time-chip.active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 600; }
 
-    .rb-cat-chip { font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 6px 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--white); cursor: pointer; color: var(--ink); transition: background 0.15s; }
-    .rb-cat-chip.selected { background: var(--butter); border-color: var(--butter); color: var(--ink); font-weight: 500; }
+    .rb-cat-chip { font-family: 'Work Sans', sans-serif; font-size: 12px; font-weight: 500; padding: 6px 13px; border-radius: 16px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.5); cursor: pointer; color: var(--ink); transition: background 0.15s; }
+    .rb-cat-chip.selected { background: var(--mint-bg); border-color: var(--mint); color: var(--mint-ink); font-weight: 600; }
     .rb-cat-add-row { display: flex; gap: 6px; }
     .rb-cat-add-row .rb-input { flex: 1; }
-    .rb-small-btn { font-family: 'IBM Plex Mono', monospace; font-size: 12px; padding: 0 14px; border-radius: 6px; border: 1px solid var(--line); background: var(--white); cursor: pointer; color: var(--ink); }
+    .rb-small-btn { font-family: 'Work Sans', sans-serif; font-size: 12px; font-weight: 600; padding: 0 14px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.5); cursor: pointer; color: var(--ink); }
 
-    .rb-photo-well { width: 100%; aspect-ratio: 16/9; border: 1px dashed var(--line); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--wine-dark); font-family: 'IBM Plex Mono', monospace; font-size: 13px; cursor: pointer; overflow: hidden; background: var(--white); }
+    .rb-photo-well { width: 100%; aspect-ratio: 16/9; border: 1.5px dashed var(--glass-border); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-family: 'Work Sans', sans-serif; font-size: 13px; cursor: pointer; overflow: hidden; background: rgba(255,255,255,0.4); flex-direction: column; gap: 6px; }
     .rb-photo-well img { width: 100%; height: 100%; object-fit: cover; }
 
-    .rb-scan-btn { width: 100%; padding: 13px; border: 1px dashed var(--wine); border-radius: 8px; background: var(--paper-2); color: var(--wine-dark); font-family: 'IBM Plex Mono', monospace; font-size: 13px; cursor: pointer; margin-bottom: 6px; text-align: center; }
+    .rb-scan-btn { width: 100%; padding: 13px; border: 1.5px dashed var(--accent); border-radius: 14px; background: rgba(130,195,245,0.10); color: var(--on-accent); font-family: 'Work Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .rb-scan-btn:disabled { opacity: 0.6; cursor: default; }
-    .rb-scan-status { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--wine-dark); margin: 0 0 16px 0; }
-    .rb-scan-error { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--rust); margin: 0 0 16px 0; }
+    .rb-scan-status { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--mint-ink); margin: 0 0 16px 0; display: flex; align-items: center; gap: 6px; }
+    .rb-scan-error { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--danger); margin: 0 0 16px 0; }
 
-    .rb-ing-row { display: grid; grid-template-columns: 74px 90px 1fr 44px; gap: 6px; margin-bottom: 6px; align-items: center; }
-    .rb-ing-remove { background: none; border: none; color: var(--rust); font-size: 24px; line-height: 1; cursor: pointer; min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .rb-ing-row { display: grid; grid-template-columns: 74px 90px 1fr 40px; gap: 6px; margin-bottom: 6px; align-items: center; }
+    .rb-ing-remove { background: rgba(193,88,79,0.1); border: none; color: var(--danger); border-radius: 50%; font-size: 20px; line-height: 1; cursor: pointer; width: 34px; height: 34px; min-width: 34px; min-height: 34px; display: flex; align-items: center; justify-content: center; padding: 0; }
     .rb-ing-add-btn { margin-top: 2px; }
 
     .rb-servings-row { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
-    .rb-stepper { display: flex; align-items: center; gap: 10px; }
-    .rb-stepper button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--line); background: var(--white); font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink); padding: 0;}
-    .rb-stepper .rb-stepper-val { font-family: 'IBM Plex Mono', monospace; font-size: 16px; min-width: 24px; text-align: center; }
+    .rb-stepper { display: flex; align-items: center; gap: 12px; }
+    .rb-stepper button { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.6); font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink); padding: 0;}
+    .rb-stepper .rb-stepper-val { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; min-width: 24px; text-align: center; }
 
     .rb-ing-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-    .rb-ing-table th { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--wine-dark); text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--line); }
-    .rb-ing-table td { padding: 7px 6px; border-bottom: 1px solid var(--line); font-size: 15px; }
-    .rb-ing-table td:first-child { font-family: 'IBM Plex Mono', monospace; white-space: nowrap; }
+    .rb-ing-table th { font-family: 'Work Sans', sans-serif; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--row-border); }
+    .rb-ing-table td { padding: 8px 6px; border-bottom: 1px solid var(--row-border); font-size: 15px; }
+    .rb-ing-table td:first-child { font-family: 'Manrope', sans-serif; font-weight: 600; white-space: nowrap; }
 
-    .rb-save-btn, .rb-edit-btn { width: 100%; padding: 13px; border-radius: 8px; border: none; background: var(--wine); color: var(--paper); font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 6px; }
-    .rb-edit-btn { background: var(--butter); color: var(--ink); margin-top: 32px; margin-bottom: 8px; }
+    .rb-save-btn { width: 100%; padding: 14px; border-radius: 14px; border: none; background: linear-gradient(135deg, #97CDF7, #6FAEE0); color: var(--on-accent); font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 6px; }
+    .rb-edit-btn { width: 100%; padding: 14px; border-radius: 14px; border: none; background: var(--mint-bg); color: var(--mint-ink); font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 16px; cursor: pointer; margin-top: 32px; margin-bottom: 8px; }
     .rb-save-btn:disabled { opacity: 0.5; cursor: default; }
-    .rb-error { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--rust); margin-top: -8px; margin-bottom: 12px; }
+    .rb-error { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--danger); margin-top: -8px; margin-bottom: 12px; }
 
     .rb-detail-photo-wrap { position: relative; margin-bottom: 16px; }
-    .rb-detail-photo { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; display: block; background: var(--paper-2); }
+    .rb-detail-photo { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 18px; display: block; background: var(--photo-grad); }
     .rb-detail-name-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-    .rb-detail-name { font-family: 'Fraunces', serif; font-weight: 700; font-size: 26px; margin: 0 0 6px 0; }
-    .rb-detail-source { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--wine-dark); margin-bottom: 4px; }
+    .rb-detail-name { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 25px; letter-spacing: -0.01em; margin: 0 0 6px 0; }
+    .rb-detail-source { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
     .rb-detail-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
-    .rb-detail-section-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--wine-dark); margin: 18px 0 8px 0; border-top: 1px solid var(--line); padding-top: 14px; }
+    .rb-detail-section-label { font-family: 'Work Sans', sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin: 18px 0 8px 0; border-top: 1px solid var(--row-border); padding-top: 14px; }
     .rb-detail-instructions { font-size: 16px; line-height: 1.65; white-space: pre-wrap; }
-    .rb-delete-btn { width: 100%; background: none; border: none; color: var(--rust); font-family: 'IBM Plex Mono', monospace; font-size: 13px; padding: 10px 14px; border-radius: 6px; cursor: pointer; text-align: center; }
+    .rb-delete-btn { width: 100%; background: none; border: none; color: var(--danger); font-family: 'Work Sans', sans-serif; font-size: 13px; font-weight: 600; padding: 10px 14px; border-radius: 10px; cursor: pointer; text-align: center; }
 
-    .rb-loading, .rb-status { text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--wine-dark); padding: 40px 20px; }
+    .rb-loading, .rb-status { text-align: center; font-family: 'Work Sans', sans-serif; font-size: 13px; color: var(--muted); padding: 40px 20px; }
 
     /* Login screen */
     .rb-login { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 24px; text-align: center; gap: 8px; }
-    .rb-login-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 32px; margin: 0; }
-    .rb-login-sub { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--wine-dark); margin: 0 0 28px 0; max-width: 320px; line-height: 1.6; }
+    .rb-login-title { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 30px; margin: 0; letter-spacing: -0.02em; }
+    .rb-login-sub { font-family: 'Work Sans', sans-serif; font-size: 14px; color: var(--muted); margin: 0 0 28px 0; max-width: 320px; line-height: 1.6; }
     .rb-authbox { width: 100%; max-width: 320px; text-align: left; }
-    .rb-login-error { font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: var(--rust); margin-top: 10px; max-width: 320px; }
-    .rb-login-note { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--line); margin-top: 40px; max-width: 300px; line-height: 1.6; }
+    .rb-login-error { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--danger); margin-top: 10px; max-width: 320px; }
+    .rb-login-note { font-family: 'Work Sans', sans-serif; font-size: 12px; color: var(--muted); margin-top: 40px; max-width: 300px; line-height: 1.6; }
 
     @media (prefers-reduced-motion: reduce) { .rb-fab, .rb-sheet, .rb-overlay { transition: none; animation: none; } }
   </style>
 </head>
+
 <body>
 
   <div class="rb-root" id="rbRoot">
@@ -269,6 +281,16 @@
     function escapeHtml(s) {
       return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
     }
+    const ICONS = {
+      heartFilled: '<svg class="rb-icon" width="16" height="16" viewBox="0 0 24 24" style="fill:var(--accent);stroke:var(--accent)"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>',
+      heartOutline: '<svg class="rb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>',
+      clock: '<svg class="rb-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+      plate: '<svg class="rb-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 2v7c0 1.1.9 2 2 2h1a2 2 0 002-2V2M6 2v20M18 2v20M15 2c-1 3-1 5 0 8s2 3 3 3"/></svg>',
+      close: '<svg class="rb-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+      camera: '<svg class="rb-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+      search: '<svg class="rb-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg>',
+      plus: '<svg class="rb-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--on-accent)" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'
+    };
     function newId() { return 'm_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 7); }
     function fmtAmt(n) {
       if (n === null || n === undefined || isNaN(n)) return '';
@@ -283,6 +305,41 @@
     function initials(name) {
       if (!name) return '?';
       return name.trim().split(/\s+/).map(p => p[0]).slice(0, 2).join('').toUpperCase();
+    }
+
+    // ---------- Icons ----------
+    function iconHeart(filled) {
+      return filled
+        ? `<svg class="rb-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>`
+        : `<svg class="rb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 000-7.8z"/></svg>`;
+    }
+    function iconClock() {
+      return `<svg class="rb-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`;
+    }
+    function iconClose() {
+      return `<svg class="rb-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>`;
+    }
+    function iconPlate() {
+      return `<svg class="rb-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.3"/></svg>`;
+    }
+    function iconCamera() {
+      return `<svg class="rb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>`;
+    }
+    function iconSearch() {
+      return `<svg class="rb-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`;
+    }
+    function iconCheck() {
+      return `<svg class="rb-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>`;
+    }
+    function iconPlus(size) {
+      size = size || 22;
+      return `<svg class="rb-icon" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`;
+    }
+    function iconTrash() {
+      return `<svg class="rb-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>`;
+    }
+    function iconEdit() {
+      return `<svg class="rb-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>`;
     }
 
     // ---------- Auth ----------
@@ -319,7 +376,9 @@
       if (code === 'auth/wrong-password' || code === 'auth/invalid-credential') return 'Falsches Passwort oder falscher Name.';
       if (code === 'auth/user-not-found') return 'Diesen Namen gibt es noch nicht. Erst registrieren.';
       if (code === 'auth/too-many-requests') return 'Zu viele Versuche. Bitte kurz warten und erneut versuchen.';
-      return 'Das hat leider nicht geklappt. Bitte erneut versuchen.';
+      if (code === 'auth/operation-not-allowed') return 'E-Mail/Passwort-Anmeldung ist in Firebase noch nicht aktiviert (Authentication → Sign-in method).';
+      if (code === 'auth/network-request-failed') return 'Keine Internetverbindung erkannt. Bitte prüfen und erneut versuchen.';
+      return 'Das hat leider nicht geklappt. (Code: ' + (code || 'unbekannt') + ')';
     }
 
     async function doAuthSubmit() {
@@ -485,7 +544,7 @@
         </div>
         <div id="rbFilterWrap"></div>
         <div id="rbBody"></div>
-        <button class="rb-fab" id="rbFab" aria-label="Gericht hinzufügen">+</button>
+        <button class="rb-fab" id="rbFab" aria-label="Gericht hinzufügen">${ICONS.plus}</button>
       `;
       document.getElementById('rbSignOutBtn').addEventListener('click', doSignOut);
       document.getElementById('rbFab').addEventListener('click', () => {
@@ -509,7 +568,7 @@
       const activeCount = state.activeFilters.size + (state.showFavoritesOnly ? 1 : 0);
       let activeChipsHtml = '';
       if (state.showFavoritesOnly) {
-        activeChipsHtml += `<div class="rb-active-chip" data-remove="__fav__">♥ Favoriten <span>×</span></div>`;
+        activeChipsHtml += `<div class="rb-active-chip" data-remove="__fav__">${ICONS.heartFilled} Favoriten <span>×</span></div>`;
       }
       state.activeFilters.forEach(f => {
         activeChipsHtml += `<div class="rb-active-chip" data-remove="${escapeHtml(f)}">${escapeHtml(f)} <span>×</span></div>`;
@@ -568,15 +627,15 @@
 
     function cardHtml(m) {
       const color = tabColor((m.categories && m.categories[0]) || m.name || 'x');
-      const photo = m.photo ? `<img class="rb-card-photo" src="${m.photo}" alt="">` : `<div class="rb-card-photo-empty">🍽</div>`;
+      const photo = m.photo ? `<img class="rb-card-photo" src="${m.photo}" alt="">` : `<div class="rb-card-photo-empty">${ICONS.plate}</div>`;
       const catChips = (m.categories || []).slice(0, 2).map(c => `<span class="rb-chip">${escapeHtml(c)}</span>`).join('');
-      const timeChip = m.prepTime ? `<span class="rb-chip rb-chip-time">⏱ ${escapeHtml(m.prepTime)}</span>` : '';
+      const timeChip = m.prepTime ? `<span class="rb-chip rb-chip-time">${ICONS.clock} ${escapeHtml(m.prepTime)}</span>` : '';
       return `
         <div class="rb-card" data-id="${m.id}">
           <div class="rb-card-tab" style="background:${color}"></div>
           <div class="rb-card-photo-wrap">
             ${photo}
-            <button class="rb-heart ${m.liked ? 'liked' : ''}" data-heart="${m.id}">${m.liked ? '♥' : '♡'}</button>
+            <button class="rb-heart ${m.liked ? 'liked' : ''}" data-heart="${m.id}">${m.liked ? ICONS.heartFilled : ICONS.heartOutline}</button>
           </div>
           <div class="rb-card-body">
             <p class="rb-card-name">${escapeHtml(m.name)}</p>
@@ -598,6 +657,14 @@
 
     function closeOverlay() { state.overlay = null; state.addDraft = null; renderOverlay(); }
 
+    function withPreservedScroll(fn) {
+      const sheet = document.querySelector('#rbOverlay .rb-sheet');
+      const scrollTop = sheet ? sheet.scrollTop : 0;
+      fn();
+      const newSheet = document.querySelector('#rbOverlay .rb-sheet');
+      if (newSheet) newSheet.scrollTop = scrollTop;
+    }
+
     function filterSheetHtml() {
       const cats = allCategories();
       return `
@@ -605,12 +672,12 @@
           <div class="rb-sheet">
             <div class="rb-sheet-head">
               <p class="rb-sheet-title">Rezepte filtern</p>
-              <button class="rb-close" id="rbFilterClose">✕</button>
+              <button class="rb-close" id="rbFilterClose">${ICONS.close}</button>
             </div>
             <div class="rb-field">
               <label class="rb-label">Besondere</label>
               <div class="rb-cat-row">
-                <div class="rb-cat-chip ${state.showFavoritesOnly ? 'selected' : ''}" id="rbFilterFav">♥ Nur Favoriten</div>
+                <div class="rb-cat-chip ${state.showFavoritesOnly ? 'selected' : ''}" id="rbFilterFav">${ICONS.heartFilled} Nur Favoriten</div>
               </div>
             </div>
             <div class="rb-field">
@@ -657,9 +724,9 @@
       if (!m) return '<div></div>';
       const sourceLabel = (SOURCE_TYPES.find(s => s.key === m.sourceType) || {}).label || 'Sonstiges';
       const sourceLine = m.sourceDetail ? `${sourceLabel} — ${escapeHtml(m.sourceDetail)}` : sourceLabel;
-      const photo = m.photo ? `<div class="rb-detail-photo-wrap"><img class="rb-detail-photo" src="${m.photo}" alt=""><button class="rb-heart rb-heart-detail ${m.liked ? 'liked' : ''}" data-heart="${m.id}">${m.liked ? '♥' : '♡'}</button></div>` : '';
+      const photo = m.photo ? `<div class="rb-detail-photo-wrap"><img class="rb-detail-photo" src="${m.photo}" alt=""><button class="rb-heart rb-heart-detail ${m.liked ? 'liked' : ''}" data-heart="${m.id}">${m.liked ? ICONS.heartFilled : ICONS.heartOutline}</button></div>` : '';
       const tags = (m.categories || []).map(c => `<span class="rb-chip">${escapeHtml(c)}</span>`).join('');
-      const timeChip = m.prepTime ? `<span class="rb-chip rb-chip-time">⏱ ${escapeHtml(m.prepTime)}</span>` : '';
+      const timeChip = m.prepTime ? `<span class="rb-chip rb-chip-time">${ICONS.clock} ${escapeHtml(m.prepTime)}</span>` : '';
       const baseServings = (m.servings && m.servings > 0) ? m.servings : 1;
       const curServings = state.detailServings || baseServings;
       const scale = curServings / baseServings;
@@ -674,12 +741,12 @@
           <div class="rb-sheet">
             <div class="rb-sheet-head">
               <p class="rb-sheet-title">&nbsp;</p>
-              <button class="rb-close" id="rbDetailClose">✕</button>
+              <button class="rb-close" id="rbDetailClose">${ICONS.close}</button>
             </div>
             ${photo}
             <div class="rb-detail-name-row">
               <p class="rb-detail-name">${escapeHtml(m.name)}</p>
-              ${!m.photo ? `<button class="rb-heart rb-heart-detail ${m.liked ? 'liked' : ''}" data-heart="${m.id}" style="position:static;">${m.liked ? '♥' : '♡'}</button>` : ''}
+              ${!m.photo ? `<button class="rb-heart rb-heart-detail ${m.liked ? 'liked' : ''}" data-heart="${m.id}" style="position:static;">${m.liked ? ICONS.heartFilled : ICONS.heartOutline}</button>` : ''}
             </div>
             <p class="rb-detail-source">${sourceLine}</p>
             <div class="rb-detail-tags">${timeChip}${tags}</div>
@@ -766,10 +833,10 @@
           <div class="rb-sheet">
             <div class="rb-sheet-head">
               <p class="rb-sheet-title">${d.id ? 'Rezept bearbeiten' : 'Neues Gericht'}</p>
-              <button class="rb-close" id="rbAddClose">✕</button>
+              <button class="rb-close" id="rbAddClose">${ICONS.close}</button>
             </div>
 
-            <button class="rb-scan-btn" id="rbScanBtn" ${d.scanning ? 'disabled' : ''}>${d.scanning ? '🔎 Rezept wird erkannt…' : '📷 Rezept aus Foto einlesen'}</button>
+            <button class="rb-scan-btn" id="rbScanBtn" ${d.scanning ? 'disabled' : ''}>${d.scanning ? ICONS.search + ' Rezept wird erkannt…' : ICONS.camera + ' Rezept aus Foto einlesen'}</button>
             <input type="file" accept="image/*" id="rbScanInput" style="display:none">
             ${d.scanError ? `<p class="rb-scan-error">${escapeHtml(d.scanError)}</p>` : ''}
             ${d.scanSuccess ? `<p class="rb-scan-status">✓ Felder ausgefüllt — bitte kurz prüfen.</p>` : ''}
@@ -804,7 +871,7 @@
             <div class="rb-field">
               <label class="rb-label">Kategorien</label>
               <div class="rb-cat-row" id="rbCatRow">
-                ${Array.from(new Set([...SUGGESTED_CATEGORIES, ...allCategories()])).map(c => `<div class="rb-cat-chip ${d.categories.includes(c) ? 'selected' : ''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</div>`).join('')}
+                ${Array.from(new Set([...SUGGESTED_CATEGORIES, ...allCategories(), ...d.categories])).map(c => `<div class="rb-cat-chip ${d.categories.includes(c) ? 'selected' : ''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</div>`).join('')}
               </div>
               <div class="rb-cat-add-row">
                 <input class="rb-input" id="rbCatCustom" placeholder="Eigenen Tag hinzufügen">
@@ -846,24 +913,50 @@
       document.getElementById('rbServingsInput').addEventListener('input', e => { d.servings = e.target.value; });
 
       document.getElementById('rbSourceRow').querySelectorAll('.rb-source-btn').forEach(el => {
-        el.addEventListener('click', () => { d.sourceType = el.getAttribute('data-key'); renderOverlay(); });
+        el.addEventListener('click', () => {
+          d.sourceType = el.getAttribute('data-key');
+          document.getElementById('rbSourceRow').querySelectorAll('.rb-source-btn').forEach(b => b.classList.toggle('active', b === el));
+          const detailInput = document.getElementById('rbSourceDetail');
+          const meta = SOURCE_TYPES.find(s => s.key === d.sourceType);
+          if (detailInput && meta) detailInput.placeholder = meta.placeholder;
+        });
       });
       document.getElementById('rbTimeRow').querySelectorAll('.rb-time-chip').forEach(el => {
-        el.addEventListener('click', () => { d.prepTime = el.getAttribute('data-time'); renderOverlay(); });
+        el.addEventListener('click', () => {
+          d.prepTime = el.getAttribute('data-time');
+          document.getElementById('rbTimeRow').querySelectorAll('.rb-time-chip').forEach(b => b.classList.toggle('active', b === el));
+          const prepInput = document.getElementById('rbPrepInput');
+          if (prepInput) prepInput.value = d.prepTime;
+        });
       });
-      document.getElementById('rbCatRow').querySelectorAll('.rb-cat-chip').forEach(el => {
+      function bindCatChip(el) {
         el.addEventListener('click', () => {
           const c = el.getAttribute('data-cat');
           const idx = d.categories.indexOf(c);
-          if (idx >= 0) d.categories.splice(idx, 1); else d.categories.push(c);
-          renderOverlay();
+          if (idx >= 0) { d.categories.splice(idx, 1); el.classList.remove('selected'); }
+          else { d.categories.push(c); el.classList.add('selected'); }
         });
-      });
+      }
+      document.getElementById('rbCatRow').querySelectorAll('.rb-cat-chip').forEach(bindCatChip);
+
       document.getElementById('rbCatAddBtn').addEventListener('click', () => {
         const input = document.getElementById('rbCatCustom');
         const val = input.value.trim();
-        if (val && !d.categories.includes(val)) d.categories.push(val);
-        renderOverlay();
+        if (!val) return;
+        input.value = '';
+        const catRow = document.getElementById('rbCatRow');
+        const already = catRow.querySelector(`.rb-cat-chip[data-cat="${CSS.escape(val)}"]`);
+        if (already) {
+          if (!d.categories.includes(val)) { d.categories.push(val); already.classList.add('selected'); }
+          return;
+        }
+        if (!d.categories.includes(val)) d.categories.push(val);
+        const chip = document.createElement('div');
+        chip.className = 'rb-cat-chip selected';
+        chip.setAttribute('data-cat', val);
+        chip.textContent = val;
+        bindCatChip(chip);
+        catRow.appendChild(chip);
       });
 
       document.getElementById('rbIngRows').querySelectorAll('.rb-ing-row').forEach(row => {
@@ -871,11 +964,11 @@
         row.querySelector('.rb-ing-amount').addEventListener('input', e => { d.ingredients[i].amount = e.target.value; });
         row.querySelector('.rb-ing-unit').addEventListener('change', e => { d.ingredients[i].unit = e.target.value; });
         row.querySelector('.rb-ing-name').addEventListener('input', e => { d.ingredients[i].name = e.target.value; });
-        row.querySelector('.rb-ing-remove').addEventListener('click', () => { d.ingredients.splice(i, 1); renderOverlay(); });
+        row.querySelector('.rb-ing-remove').addEventListener('click', () => { d.ingredients.splice(i, 1); withPreservedScroll(renderOverlay); });
       });
       document.getElementById('rbIngAddBtn').addEventListener('click', () => {
         d.ingredients.push({ amount: '', unit: 'g', name: '' });
-        renderOverlay();
+        withPreservedScroll(renderOverlay);
       });
 
       const photoWell = document.getElementById('rbPhotoWell');
