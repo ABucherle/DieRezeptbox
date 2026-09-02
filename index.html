@@ -127,7 +127,7 @@
 
     .rb-card { position: relative; isolation: isolate; border-radius: 20px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; border: 1px solid var(--glass-border); box-shadow: 0 8px 24px rgba(40,90,80,0.10); background: transparent; }
     .rb-card::before { content: ''; position: absolute; inset: -1px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: -1; }
-    .rb-card-tab { height: 5px; width: 100%; }
+    .rb-card-tab { height: 5px; width: 100%; border-radius: 20px 20px 0 0; }
     .rb-card-photo-wrap { position: relative; }
     .rb-card-photo { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; background: var(--photo-grad); }
     .rb-card-photo-empty { width: 100%; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; color: var(--muted); background: var(--photo-grad); }
@@ -152,10 +152,9 @@
     @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
     .rb-overlay { position: fixed; inset: 0; background: rgba(15,35,30,0.35); backdrop-filter: blur(2px); z-index: 50; display: flex; align-items: flex-end; justify-content: center; animation: fadeIn 0.2s ease-out forwards; }
-    .rb-sheet { position: relative; isolation: isolate; background: transparent; width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; border-radius: 24px 24px 0 0; padding: 18px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px; box-shadow: 0 -16px 50px rgba(20,60,50,0.18); border-top: 1px solid var(--glass-border); overscroll-behavior-y: contain; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-    .rb-sheet::before { content: ''; position: absolute; inset: -1px 0 0 0; background: var(--glass-strong); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); z-index: -1; }
+    .rb-sheet { background: var(--glass-strong); backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; border-radius: 24px 24px 0 0; padding: 18px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px; box-shadow: 0 -16px 50px rgba(20,60,50,0.18); border-top: 1px solid var(--glass-border); overscroll-behavior-y: contain; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-    @media (min-width: 640px) { .rb-overlay { align-items: center; } .rb-sheet { border-radius: 20px; max-height: 88vh; border: 1px solid var(--glass-border); } .rb-sheet::before { inset: -1px; } }
+    @media (min-width: 640px) { .rb-overlay { align-items: center; } .rb-sheet { border-radius: 20px; max-height: 88vh; border: 1px solid var(--glass-border); } }
     .rb-sheet-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
     .rb-sheet-title { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 19px; margin: 0; }
     
